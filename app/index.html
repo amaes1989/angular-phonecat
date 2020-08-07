@@ -7,18 +7,17 @@
     <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css" />
     <script src="lib/angular/angular.js"></script>
     <script src="app.js"></script>
+    <script src="greet-user.component.js"></script>
+    <script src="phone-list.component.js"></script>
+    <!-- <script src="phone-list.component.spec.js"></script> -->
 </head>
 
-<body ng-controller="PhoneListController">
-    <h1>Hello {{name}}!</h1>
-    <ul>
-        <li ng-repeat="phone  in phones">
-            <span>{{phone.name}}</span>
-            <p>{{phone.snippet}}</p>
-        </li>
+<body>
+    <h1>
+        <greet-user></greet-user>
+    </h1>
+    <phone-list></phone-list>
 
-    </ul>
-    <p>Total number of phones: {{phones.length}}</p>
 </body>
 
 </html>
