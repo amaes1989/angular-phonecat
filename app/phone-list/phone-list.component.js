@@ -13,5 +13,6 @@ angular.module('phoneList').component('phoneList', {
                 snippet: 'The Next, Next Generation tablet.'
             }
         ];
+        this.orderProp = 'newest';
     }
 });

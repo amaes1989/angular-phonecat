@@ -28,7 +28,27 @@ describe('PhoneCat Application', function() {
             expect(phoneList.count()).toBe(1);
 
             query.sendKeys('motorola');
-            expect(phoneList.count()).toBe(3);
+            expect(phoneList.count()).toBe(2);
+        });
+
+        it('should be possible to control phone order via the drop-down menu', function() {
+            var queryField = element(by.model('$ctrl.query'));
+            var orderSelect = element(by.model('$ctrl.oderProp'));
+            var nameOption = orderSelect.element(by.css('option[value="name"]'));
+            var phoneNameColumn = element.all(by.repeater('phone in $ctrl.phones').column('phone.name'));
+
+            function getNames() {
+                return phoneNameColumn.map(function(elem) {
+                    return elem.getText();
+                });
+            }
+
+            queryField.sendKeys('tablet');
+
+            expect(getNames()).toEqual([
+                'Motorola XOOM\u2122 with WiFi',
+                'Motorola XOOM\u2122'
+            ]);
         });
     });
 });
