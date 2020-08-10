@@ -1,6 +1,7 @@
 'use strict';
 
 const { browser } = require("protractor");
+const { element } = require("angular");
 
 // AngularJS E2E Testing Guide:
 // https://docs.angularjs.org/guide/e2e-testing
@@ -49,6 +50,14 @@ describe('PhoneCat Application', function() {
                 'Motorola XOOM\u2122 with WiFi',
                 'Motorola XOOM\u2122'
             ]);
+        });
+
+        it('should render phone specific links', function() {
+            var query = element(by.model('$ctrl.query'));
+            query.sendKeys('nexus');
+
+            element.all(by.css('.phones li a')).first().click();
+            expect(browser.getCurrentUrl()).toContain('index.html#!/phones/nexus-s');
         });
     });
 });
