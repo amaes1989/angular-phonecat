@@ -1,40 +1,38 @@
 'use strict';
 
-const { browser } = require("protractor");
-const { element } = require("angular");
-
 // AngularJS E2E Testing Guide:
 // https://docs.angularjs.org/guide/e2e-testing
 
-describe('My app', function() {
+describe('PhoneCat Application', function() {
 
-    beforeEach(function() {
+    it('should redirect `index.html` to `index.html#!/phones', function() {
         browser.get('index.html');
+        expect(browser.getCurrentUrl()).toContain('index.html#!/phones');
     });
 
-});
+    describe('View: Phone list', function() {
 
-describe('PhoneCat Application', function() {
-    describe('phoneList', function() {
         beforeEach(function() {
-            browser.get('index.html');
+            browser.get('index.html#!/phones');
         });
+
         it('should filter the phone list as a user types into the search box', function() {
             var phoneList = element.all(by.repeater('phone in $ctrl.phones'));
-            var query = elementt(by.model('$ctrl.query'));
+            var query = element(by.model('$ctrl.query'));
 
             expect(phoneList.count()).toBe(20);
 
             query.sendKeys('nexus');
             expect(phoneList.count()).toBe(1);
 
+            query.clear();
             query.sendKeys('motorola');
             expect(phoneList.count()).toBe(8);
         });
 
         it('should be possible to control phone order via the drop-down menu', function() {
             var queryField = element(by.model('$ctrl.query'));
-            var orderSelect = element(by.model('$ctrl.oderProp'));
+            var orderSelect = element(by.model('$ctrl.orderProp'));
             var nameOption = orderSelect.element(by.css('option[value="name"]'));
             var phoneNameColumn = element.all(by.repeater('phone in $ctrl.phones').column('phone.name'));
 
@@ -44,11 +42,18 @@ describe('PhoneCat Application', function() {
                 });
             }
 
-            queryField.sendKeys('tablet');
+            queryField.sendKeys('tablet'); // Let's narrow the dataset to make the assertions shorter
 
             expect(getNames()).toEqual([
-                'Motorola XOOM\u2122 with WiFi',
-                'Motorola XOOM\u2122'
+                'Motorola XOOM\u2122 with Wi-Fi',
+                'MOTOROLA XOOM\u2122'
+            ]);
+
+            nameOption.click();
+
+            expect(getNames()).toEqual([
+                'MOTOROLA XOOM\u2122',
+                'Motorola XOOM\u2122 with Wi-Fi'
             ]);
         });
 
@@ -59,5 +64,19 @@ describe('PhoneCat Application', function() {
             element.all(by.css('.phones li a')).first().click();
             expect(browser.getCurrentUrl()).toContain('index.html#!/phones/nexus-s');
         });
+
     });
+
+    describe('View: Phone detail', function() {
+
+        beforeEach(function() {
+            browser.get('index.html#!/phones/nexus-s');
+        });
+
+        it('should display placeholder page with `phoneId`', function() {
+            expect(element(by.binding('$ctrl.phoneId')).getText()).toBe('nexus-s');
+        });
+
+    });
+
 });
